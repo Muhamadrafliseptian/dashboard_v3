@@ -7,9 +7,9 @@
 	<title>
         .: {{ config('app.name') }} - Login :.
     </title>
-    <link rel="icon" type="image/png" href="{{ url('/template/images/LOGO-TAB-TNOS.png') }}" />
+    <link rel="icon" type="image/png" href="{{ dynamic_asset('/template/images/LOGO-TAB-TNOS.png') }}" />
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="{{ url('/login-template/css/my-login.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ dynamic_asset('/login-template/css/my-login.css') }}">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
@@ -19,7 +19,7 @@
 			<div class="row justify-content-md-center h-100">
                 <div class="card-wrapper">
                     <div class="brand">
-                        <img src="{{ url('/template/images/LOGO-TAB-TNOS.png') }}" alt="logo">
+                        <img src="{{ dynamic_asset('/template/images/LOGO-TAB-TNOS.png') }}" alt="logo">
 					</div>
 					<div class="card fat">
                         @if (session("success"))

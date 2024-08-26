@@ -13,8 +13,7 @@ if (!function_exists('dynamic_asset')) {
         // Untuk mode manual `localhost`
 
         # DEVELOPMENT
-        return $baseUrl . '/' . ltrim($path, '/');
-
+        return $baseUrl . '/public/' . ltrim($path, '/');
         # PRODUCTION
         // return $baseUrl . '/' . ltrim($path, '/');
 
