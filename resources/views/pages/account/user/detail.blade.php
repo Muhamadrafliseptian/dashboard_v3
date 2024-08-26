@@ -1,6 +1,6 @@
 @extends('pages.layouts.main')
 
-{{-- @section('title', 'Akun User ' . $detail['detail']['mmbr_name']) --}}
+@section('title', 'Detail Akun User')
 
 @section('content-page')
 
@@ -34,7 +34,7 @@
                 <div class="x_panel">
                     <div class="x_title">
                         <h2>
-                            Detail @yield('title')
+                            Detail
                         </h2>
                         <div class="clearfix"></div>
                     </div>
@@ -52,7 +52,7 @@
                                 Email
                             </label>
                             <div class="col-md-5 col-sm-9 col-xs-12">
-                                {{ $detail['detail']['email'] }}
+                                {{ empty($detail['detail']['email']) ? '-' : $detail['detail']['email'] }}
                             </div>
                         </div>
                         <div class="form-group row">

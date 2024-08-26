@@ -81,6 +81,7 @@ class PartnerController extends Controller
             if ($responseBody["statusCode"] == 200) {
 
                 $data["response"] = $responseBody["data"];
+                $data["name"] = $name;
 
                 return view("pages.account.partner.responder.index", $data);
             } else {

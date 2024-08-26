@@ -3,11 +3,22 @@
 @section('title', '' . $dataname)
 
 @section("component-css")
-<link href="{{ url('public/template') }}/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-<link href="{{ url('public/template') }}/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
-<link href="{{ url('public/template') }}/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
-<link href="{{ url('public/template') }}/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-<link href="{{ url('public/template') }}/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+<link href="{{ dynamic_asset('template') }}/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="{{ dynamic_asset('template') }}/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+<link href="{{ dynamic_asset('template') }}/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+<link href="{{ dynamic_asset('template') }}/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<link href="{{ dynamic_asset('template') }}/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+
+<style>
+    .invalid-feedback {
+        color: #a94442;
+        font-size: 10px;
+    }
+
+    .is-invalid {
+        border: 1px solid #a94442 !important;
+    }
+</style>
 @endsection
 
 @section('content-page')
@@ -98,7 +109,7 @@
 
                                         @if ($item['total_responder'] == 0 && $item['total_transaksi'] == 0)
                                         <form action="{{ route('pages.account.partner.hapus', ['institution_id' => $item['institution_id'] ]) }}" method="POST" style="display: inline;">
-                                            @csrf   
+                                            @csrf
                                             @method("DELETE")
                                             <button type="submit" class="btn btn-danger btn-sm">
                                                 <i class="fa fa-trash"></i> Hapus
@@ -129,7 +140,7 @@
                         <i class="fa fa-plus"></i> Tambah Data
                     </h4>
                 </div>
-                <form action="{{ route('pages.accounts.partner.store', ['name' => $dataname]) }}" method="POST">
+                <form action="{{ route('pages.accounts.partner.store', ['name' => $dataname]) }}" method="POST" id="form-akun">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
@@ -207,9 +218,71 @@
 @endsection
 
 @section("component-js")
-<script src="{{ url('public/template') }}/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="{{ url('public/template') }}/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-<script src="{{ url('public/template') }}/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-<script src="{{ url('public/template') }}/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-<script src="{{ url('public/template') }}/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="{{ dynamic_asset('template') }}/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{{ dynamic_asset('template') }}/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{{ dynamic_asset('template') }}/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="{{ dynamic_asset('template') }}/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{{ dynamic_asset('template') }}/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#form-akun").validate({
+            rules: {
+                regency_id: {
+                    required: true
+                },
+                country_code: {
+                    required: true
+                },
+                email: {
+                    required: true
+                },
+                phone_number: {
+                    required: true
+                },
+                nama_pic: {
+                    required: true
+                },
+                phone_number_pic: {
+                    required: true
+                },
+                alamat_organisasi: {
+                    required: true
+                }
+            },
+            messages: {
+                regency_id: {
+                    required: "Kota / Kabupaten wajib diisi.",
+                },
+                country_code: {
+                    required: "Kode Negara wajib diisi."
+                },
+                email: {
+                    required: "Email wajib diisi"
+                },
+                phone_number: {
+                    required: "Nomor HP wajib diisi"
+                },
+                nama_pic: {
+                    required: "Nama PIC wajib diisi"
+                },
+                phone_number_pic: {
+                    required: "Nomor HP PIC wajib diisi"
+                },
+                alamat_organisasi: {
+                    required: "Alamat Organisasi wajib diisi"
+                }
+            },
+            errorPlacement: function(error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function(element) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+    })
+</script>
 @endsection

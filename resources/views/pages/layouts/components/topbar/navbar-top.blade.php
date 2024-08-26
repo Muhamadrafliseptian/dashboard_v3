@@ -9,12 +9,14 @@
                 <li class="">
                     <a href="javascript:;" class="user-profile dropdown-toggle text-uppercase" data-toggle="dropdown"
                         aria-expanded="false">
-                        <img src="{{ url('public/template/images/img.jpg') }}" alt=""> {{ session('data.nama') }}
+                        <img src="{{ dynamic_asset('template/images/img.jpg') }}" alt=""> {{ session('data.nama') }}
                         <span class=" fa fa-angle-down"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-usermenu pull-right">
                         <li>
-                            <a href="javascript:;"> Profile</a>
+                            <a href="{{ route('pages.account.profil.index') }}">
+                                Profile
+                            </a>
                         </li>
                         <li>
                             <a href="{{ route('pages.logout') }}">
@@ -24,7 +26,7 @@
                     </ul>
                 </li>
 
-                <li role="presentation" class="dropdown">
+                {{-- <li role="presentation" class="dropdown">
                     <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown"
                         aria-expanded="false">
                         <i class="fa fa-envelope-o"></i>
@@ -34,7 +36,7 @@
                         <li>
                             <a>
                                 <span class="image">
-                                    <img src="images/img.jpg" alt="Profile Image" />
+                                    <img src="{{ dynamic_asset('template/images/img.jpg') }}" alt="Profile Image" />
                                 </span>
                                 <span>
                                     <span>John Smith</span>
@@ -48,36 +50,9 @@
                         </li>
                         <li>
                             <a>
-                                <span class="image"><img src="images/img.jpg"
-                                        alt="Profile Image" /></span>
-                                <span>
-                                    <span>John Smith</span>
-                                    <span class="time">3 mins ago</span>
+                                <span class="image">
+                                    <img src="{{ dynamic_asset('template/images/img.jpg') }}" alt="Profile Image" />
                                 </span>
-                                <span class="message">
-                                    Film festivals used to be do-or-die moments for movie makers. They were
-                                    where...
-                                </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a>
-                                <span class="image"><img src="images/img.jpg"
-                                        alt="Profile Image" /></span>
-                                <span>
-                                    <span>John Smith</span>
-                                    <span class="time">3 mins ago</span>
-                                </span>
-                                <span class="message">
-                                    Film festivals used to be do-or-die moments for movie makers. They were
-                                    where...
-                                </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a>
-                                <span class="image"><img src="images/img.jpg"
-                                        alt="Profile Image" /></span>
                                 <span>
                                     <span>John Smith</span>
                                     <span class="time">3 mins ago</span>
@@ -97,7 +72,7 @@
                             </div>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
             </ul>
         </nav>
     </div>

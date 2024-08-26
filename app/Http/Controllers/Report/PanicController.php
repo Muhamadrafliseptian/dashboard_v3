@@ -27,7 +27,6 @@ class PanicController extends Controller
 
             DB::commit();
 
-
             if ($responsePanic["statusCode"] == 200) {
                 $data["panicReport"] = $responsePanic["data"];
             }

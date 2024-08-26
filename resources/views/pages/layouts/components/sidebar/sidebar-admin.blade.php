@@ -2,7 +2,7 @@
     <div class="menu_section">
         <h3>Menu</h3>
         <ul class="nav side-menu">
-            <li>
+            <li class="{{ Request::is('pages/dashboard') ? 'active' : '' }}">
                 <a href="{{ route('pages.dashboard') }}">
                     <i class="fa fa-home"></i> Dashboard
                 </a>
@@ -24,13 +24,13 @@
                     </ul>
                 </li>
                 @endif
-                <li>
+                <li class="{{ Request::segment(2) == "transaksi" ? 'active' : '' }}">
                     <a>
                         <i class="fa fa-money"></i> Transaksi
                         <span class="fa fa-chevron-down"></span>
                     </a>
                     <ul class="nav child_menu">
-                        <li>
+                        <li class="{{ Request::segment(3) == "history-payment" ? 'active' : '' }}">
                             <a href="{{ route('pages.transaction.history-payment.index') }}"> Riwayat Pembayaran </a>
                         </li>
                     </ul>
@@ -50,19 +50,21 @@
                 </li>
             @endif
 
-            <li>
+            <li class="{{ request()->routeIs("pages.accounts.user.index") || request()->routeIs('pages.accounts.user.show') ? 'active' : '' }}">
                 <a>
                     <i class="fa fa-users"></i> Akun
                     <span class="fa fa-chevron-down"></span>
                 </a>
                 <ul class="nav child_menu">
-                    <li>
-                        <a
-                            href="{{ route('pages.account.responder.index-admin', ['member_account_code' => session('data.member_account_code')]) }}">Responder</a>
+                    <li class="{{ Request::segment(3) == "responder" ? 'active' : '' }}">
+                        <a href="{{ route('pages.account.responder.index-admin', ['member_account_code' => session('data.member_account_code')]) }}">
+                            Responder
+                        </a>
                     </li>
-                    <li>
-                        <a
-                            href="{{ route('pages.accounts.user.index-admin', ['member_account_code' => session('data.member_account_code')]) }}">User</a>
+                    <li class="{{ request()->routeIs("pages.accounts.user.index") || request()->routeIs('pages.accounts.user.show') ? 'active' : '' }}">
+                        <a href="{{ route('pages.accounts.user.index-admin', ['member_account_code' => session('data.member_account_code')]) }}">
+                            User
+                        </a>
                     </li>
                 </ul>
             </li>

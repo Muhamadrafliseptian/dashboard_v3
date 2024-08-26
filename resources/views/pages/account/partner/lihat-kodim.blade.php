@@ -2,12 +2,27 @@
 
 @section('title', 'Detail Akun ' . $name)
 
-@section("component-css")
-<link href="{{ url('public/template') }}/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-<link href="{{ url('public/template') }}/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
-<link href="{{ url('public/template') }}/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
-<link href="{{ url('public/template') }}/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-<link href="{{ url('public/template') }}/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+@section('component-css')
+
+    <link href="{{ dynamic_asset('template') }}/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="{{ dynamic_asset('template') }}/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css"
+        rel="stylesheet">
+    <link href="{{ dynamic_asset('template') }}/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css"
+        rel="stylesheet">
+    <link href="{{ dynamic_asset('template') }}/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css"
+        rel="stylesheet">
+    <link href="{{ dynamic_asset('template') }}/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css"
+        rel="stylesheet">
+    <style>
+        .invalid-feedback {
+            color: #a94442;
+            font-size: 10px;
+        }
+
+        .is-invalid {
+            border: 1px solid #a94442 !important;
+        }
+    </style>
 @endsection
 
 @section('content-page')
@@ -65,40 +80,41 @@
                                     $nomer = 0;
                                 @endphp
                                 @foreach ($datapolsek as $item)
-                                <tr>
-                                    <td class="text-center">{{ ++$nomer }}.</td>
-                                    <td>{{ $item["nama"] }}</td>
-                                    <td class="text-center">{{ $item['phone_number'] }}</td>
-                                    <td class="text-center">{{ $item["unique_institution_id"] }}</td>
-                                    <td class="text-center">{{ $item["created_at"] }}</td>
-                                    <td class="text-center">{{ $item['total_responder'] }}</td>
-                                    <td class="text-center">{{ $item['total_transaksi'] }}</td>
-                                    <td class="text-center">
-                                        @if ($item['total_responder'] != 0)
-                                        <a href="{{ route('pages.account.partner.lihat-responder', ['name' => $name, 'institution_id' => $item['institution_id']]) }}" class="btn btn-info btn-sm">
-                                            <i class="fa fa-search"></i> Lihat Responder
-                                        </a>
-                                        @endif
-                                        @if ($item['total_transaksi'] != 0)
+                                    <tr>
+                                        <td class="text-center">{{ ++$nomer }}.</td>
+                                        <td>{{ $item['nama'] }}</td>
+                                        <td class="text-center">{{ $item['phone_number'] }}</td>
+                                        <td class="text-center">{{ $item['unique_institution_id'] }}</td>
+                                        <td class="text-center">{{ $item['created_at'] }}</td>
+                                        <td class="text-center">{{ $item['total_responder'] }}</td>
+                                        <td class="text-center">{{ $item['total_transaksi'] }}</td>
+                                        <td class="text-center">
+                                            @if ($item['total_responder'] != 0)
+                                                <a href="{{ route('pages.account.partner.lihat-responder', ['name' => $name, 'institution_id' => $item['institution_id']]) }}"
+                                                    class="btn btn-info btn-sm">
+                                                    <i class="fa fa-search"></i> Lihat Responder
+                                                </a>
+                                            @endif
+                                            @if ($item['total_transaksi'] != 0)
+                                                <a href="{{ route('pages.account.partner.lihat-transaksi', ['name' => $name, 'institution_id' => $item['institution_id']]) }}"
+                                                    class="btn btn-primary btn-sm">
+                                                    <i class="fa fa-search"></i> Lihat Transaksi
+                                                </a>
+                                            @endif
 
-                                        <a href="{{ route('pages.account.partner.lihat-transaksi', ['name' => $name, 'institution_id' => $item['institution_id']]) }}" class="btn btn-primary btn-sm">
-                                            <i class="fa fa-search"></i> Lihat Transaksi
-                                        </a>
-                                        @endif
-
-                                        {{-- @if ($name == "KORAMIL")
-                                        @endif --}}
-                                        @if ($item['total_responder'] == 0 && $item['total_transaksi'] == 0)
-                                        <form action="{{ route('pages.account.partner.hapus', ['institution_id' => $item['institution_id'] ]) }}" method="POST" style="display: inline">
-                                            @csrf
-                                            @method("DELETE")
-                                            <button type="submit" class="btn btn-danger btn-sm">
-                                                <i class="fa fa-trash"></i> Hapus
-                                            </button>
-                                        </form>
-                                        @endif
-                                    </td>
-                                </tr>
+                                            @if ($item['total_responder'] == 0 && $item['total_transaksi'] == 0)
+                                                <form
+                                                    action="{{ route('pages.account.partner.hapus', ['institution_id' => $item['institution_id']]) }}"
+                                                    method="POST" style="display: inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn-sm">
+                                                        <i class="fa fa-trash"></i> Hapus
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </td>
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>
@@ -120,17 +136,21 @@
                         <i class="fa fa-plus"></i> Tambah Data
                     </h4>
                 </div>
-                <form action="{{ route('pages.accounts.partner.store', ['name' => $name === 'POLRI' ? 'POLSEK' : ($name === 'TNI' ? 'KORAMIL' : $name)]) }}" method="POST">                    @csrf
+                <form
+                    action="{{ route('pages.accounts.partner.store', ['name' => $name === 'POLRI' ? 'POLSEK' : ($name === 'TNI' ? 'KORAMIL' : $name)]) }}"
+                    method="POST" id="form-akun">
+                    @csrf
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-6 mb-2">
                                 <div class="form-group">
-                                    <label for="regency_id" class="form-label"> {{$name}} </label>
+                                    <label for="regency_id" class="form-label"> {{ $name }} </label>
                                     <select name="regency_id" class="form-control" id="regency_id">
                                         <option value="">- Pilih -</option>
                                         @foreach ($detail as $item)
-                                            <option value="{{ $item['id'] }}|{{ $item['name'] }}|{{ $item['regency_id'] }}">
-                                                {{$name}} {{ $item['name'] }}
+                                            <option
+                                                value="{{ $item['id'] }}|{{ $item['name'] }}|{{ $item['regency_id'] }}">
+                                                {{ $name }} {{ $item['name'] }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -171,14 +191,16 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="phone_number_pic" class="form-label"> Nomor HP PIC </label>
-                                    <input type="text" class="form-control" name="phone_number_pic" id="phone_number_pic"
-                                        placeholder="Masukkan Nomor HP PIC" value="{{ old('phone_number_pic') }}">
+                                    <input type="text" class="form-control" name="phone_number_pic"
+                                        id="phone_number_pic" placeholder="Masukkan Nomor HP PIC"
+                                        value="{{ old('phone_number_pic') }}">
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="alamat_organisasi" class="form-label"> Alamat </label>
-                            <textarea name="alamat_organisasi" class="form-control" id="alamat_organisasi" rows="5" placeholder="Masukkan Alamat Organisasi">{{ old('alamat_organisasi') }}</textarea>
+                            <textarea name="alamat_organisasi" class="form-control" id="alamat_organisasi" rows="5"
+                                placeholder="Masukkan Alamat Organisasi">{{ old('alamat_organisasi') }}</textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -196,10 +218,76 @@
 
 @endsection
 
-@section("component-js")
-<script src="{{ url('public/template') }}/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="{{ url('public/template') }}/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-<script src="{{ url('public/template') }}/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-<script src="{{ url('public/template') }}/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-<script src="{{ url('public/template') }}/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+@section('component-js')
+
+    <script src="{{ dynamic_asset('template') }}/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="{{ dynamic_asset('template') }}/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="{{ dynamic_asset('template') }}/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js">
+    </script>
+    <script src="{{ dynamic_asset('template') }}/vendors/datatables.net-responsive/js/dataTables.responsive.min.js">
+    </script>
+    <script src="{{ dynamic_asset('template') }}/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#form-akun").validate({
+                rules: {
+                    regency_id: {
+                        required: true
+                    },
+                    email: {
+                        required: true
+                    },
+                    country_code: {
+                        required: true
+                    },
+                    phone_number: {
+                        required: true
+                    },
+                    nama_pic: {
+                        required: true
+                    },
+                    phone_number_pic: {
+                        required: true
+                    },
+                    alamat_organisasi: {
+                        required: true
+                    }
+                },
+                messages: {
+                    regency_id: {
+                        required: "Kota / Kabupaten wajib diisi.",
+                    },
+                    email: {
+                        required: "Email wajib diisi."
+                    },
+                    country_code: {
+                        required: "Kode Negara wajib diisi"
+                    },
+                    phone_number: {
+                        required: "Nomor HP wajib diisi"
+                    },
+                    nama_pic: {
+                        required: "Nama PIC wajib diisi"
+                    },
+                    phone_number_pic: {
+                        required: "Nomor HP PIC wajib diisi"
+                    },
+                    alamat_organisasi: {
+                        required: "Alamat organisasi wajib diisi"
+                    }
+                },
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function(element) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+        })
+    </script>
+
 @endsection

@@ -3,13 +3,24 @@
 @section('title', 'Responder')
 
 @section('component-css')
-    <link href="{{ url('public/template') }}/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-    <link href="{{ url('public/template') }}/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css"
+    <link href="{{ dynamic_asset('template') }}/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="{{ dynamic_asset('template') }}/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css"
         rel="stylesheet">
-    <link href="{{ url('public/template') }}/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css"
+    <link href="{{ dynamic_asset('template') }}/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css"
         rel="stylesheet">
-    <link href="{{ url('public/template') }}/vendors/switchery/dist/switchery.min.css" rel="stylesheet">
-    <link href="{{ url('public/template') }}/build/css/custom.min.css" rel="stylesheet">
+    <link href="{{ dynamic_asset('template') }}/vendors/switchery/dist/switchery.min.css" rel="stylesheet">
+    <link href="{{ dynamic_asset('template') }}/build/css/custom.min.css" rel="stylesheet">
+
+    <style>
+        .invalid-feedback {
+            color: #a94442;
+            font-size: 10px;
+        }
+
+        .is-invalid {
+            border: 1px solid #a94442 !important;
+        }
+    </style>
 @endsection
 
 @section('content-page')
@@ -53,7 +64,8 @@
                     </div>
                     @if ($detailMembership['total_responder'] > $detailMembership['limit_contact'])
                         <p>
-                            Silahkan non-aktifkan responder anda, karena telah melebihi limit. Agar Alert button dapat digunakan
+                            Silahkan non-aktifkan responder anda, karena telah melebihi limit. Agar Alert button dapat
+                            digunakan
                         </p>
                     @endif
                     <div class="x_content">
@@ -62,7 +74,6 @@
                                 <tr>
                                     <th class="text-center">No</th>
                                     <th>Nama</th>
-                                    {{-- <th class="text-center">Kode Akun Member</th> --}}
                                     <th class="text-center">Email</th>
                                     <th class="text-center">Nomor HP</th>
                                     <th class="text-center">Username</th>
@@ -79,17 +90,20 @@
                                     <tr>
                                         <td class="text-center">{{ ++$nomer }}.</td>
                                         <td>{{ $item['detail']['nama'] }}</td>
-                                        {{-- <td class="text-center">{{ $item['detail']['member_account_code'] }}</td> --}}
-                                        <td class="text-center">{{ $item['detail']['email'] }}</td>
+                                        <td class="text-center">
+                                            {{ empty($item['detail']['email']) ? '-' : $item['detail']['email'] }}</td>
                                         <td class="text-center">{{ $item['detail']['phone_number'] }}</td>
                                         <td class="text-center">
                                             {{ empty($item['detail']['username']) ? '-' : $item['detail']['username'] }}
                                         </td>
                                         <td class="text-center">
                                             <div class="custom-control custom-switch">
-                                                <input {{ $item['detail']['account_status_id'] == "active" ? 'checked' : '' }} type="checkbox" class="custom-control-input js-switch"
+                                                <input
+                                                    {{ $item['detail']['account_status_id'] == 'active' ? 'checked' : '' }}
+                                                    type="checkbox" class="custom-control-input js-switch"
                                                     id="customSwitch{{ $item['detail']['id_responder_organization'] }}"
-                                                    data-id="{{ empty($item['detail']['id_request_contact']) ? $item['detail']['id_responder_organization'] : $item['detail']['id_request_contact'] }}" data-tipe="{{ $item['detail']['org'] }}">
+                                                    data-id="{{ empty($item['detail']['id_request_contact']) ? $item['detail']['id_responder_organization'] : $item['detail']['id_request_contact'] }}"
+                                                    data-tipe="{{ $item['detail']['org'] }}">
                                                 <label class="custom-control-label text-uppercase"
                                                     for="customSwitch{{ $item['detail']['id_responder_organization'] }}">
                                                     {{ $item['detail']['account_status_id'] }}
@@ -98,7 +112,7 @@
                                         </td>
                                         <td class="text-center">{{ $item['detail']['nama_institusi'] }}</td>
                                         <td class="text-center">
-                                            <a href="{{ route('pages.accounts.responder.show', ['username' => $item['detail']['username'], 'org' => $item['detail']['org'], 'id_req_contact' => empty($item['detail']['id_request_contact']) ? '0' : $item['detail']['id_request_contact'] ])}}"
+                                            <a href="{{ route('pages.accounts.responder.show', ['username' => $item['detail']['username'], 'org' => $item['detail']['org'], 'id_req_contact' => empty($item['detail']['id_request_contact']) ? '0' : $item['detail']['id_request_contact']]) }}"
                                                 class="btn btn-info btn-sm">
                                                 <i class="fa fa-search"></i> Detail
                                             </a>
@@ -137,29 +151,9 @@
                 </div>
                 <form
                     action="{{ route('pages.accounts.responder.store', ['member_account_code' => session('data.member_account_code')]) }}"
-                    method="POST">
+                    method="POST" id="form-responder">
                     @csrf
                     <div class="modal-body">
-                        {{-- <div class="form-group">
-                            <label for="nama" class="form-label"> Nama </label>
-                            <input type="text" class="form-control" name="nama" id="nama"
-                                placeholder="Masukkan Nama" value="{{ old('nama') }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="phone_number" class="form-label"> Nomor HP </label>
-                            <input type="number" class="form-control" name="phone_number" id="phone_number"
-                                placeholder="Masukkan Nomor HP" value="{{ old('phone_number') }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="password" class="form-label"> Password </label>
-                            <input type="password" class="form-control" name="password" id="password"
-                                placeholder="Masukkan Password">
-                        </div>
-                        <div class="form-group">
-                            <label for="country_code" class="form-label"> Kode Negara </label>
-                            <input type="text" class="form-control" name="country_code" id="country_code"
-                                placeholder="Masukkan Kode Negara" value="{{ old('country_code') }}">
-                        </div> --}}
                         <div class="row">
                             <div class="col-md-6 mb-2">
                                 <div class="form-group">
@@ -194,7 +188,8 @@
                         </div>
                         <div class="form-group">
                             <label for="unique_responder_id" class="form-label"> Kode Referensi (Opsional) </label>
-                            <input type="text" class="form-control" name="unique_responder_id" id="unique_responder_id" placeholder="Masukkan Kode Referensi">
+                            <input type="text" class="form-control" name="unique_responder_id"
+                                id="unique_responder_id" placeholder="Masukkan Kode Referensi">
                             <small class="text-danger">
                                 *Catatan : Tidak Perlu Mengisi Kolom Yang Lain, Jika Memiliki Kode Referensi
                             </small>
@@ -216,13 +211,14 @@
 @endsection
 
 @section('component-js')
-    <script src="{{ url('public/template') }}/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="{{ url('public/template') }}/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-    <script src="{{ url('public/template') }}/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js">
+    <script src="{{ dynamic_asset('template') }}/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="{{ dynamic_asset('template') }}/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="{{ dynamic_asset('template') }}/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js">
     </script>
-    <script src="{{ url('public/template') }}/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="{{ url('public/template') }}/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-    <script src="{{ url('public/template') }}/vendors/switchery/dist/switchery.min.js"></script>
+    <script src="{{ dynamic_asset('template') }}/vendors/datatables.net-responsive/js/dataTables.responsive.min.js">
+    </script>
+    <script src="{{ dynamic_asset('template') }}/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="{{ dynamic_asset('template') }}/vendors/switchery/dist/switchery.min.js"></script>
 
     <script type="text/javascript">
         $.ajaxSetup({
@@ -282,6 +278,49 @@
                 });
             });
         });
+
+        $(document).ready(function() {
+            $("#form-responder").validate({
+                rules: {
+                    nama: {
+                        required: true
+                    },
+                    country_code: {
+                        required: true
+                    },
+                    email: {
+                        required: true
+                    },
+                    phone_number: {
+                        required: true
+                    }
+                },
+                messages: {
+                    nama: {
+                        required: "Nama wajib diisi.",
+                    },
+                    country_code: {
+                        required: "Kode Negara wajib diisi."
+                    },
+                    email: {
+                        required: "Email wajib diisi"
+                    },
+                    phone_number: {
+                        required: "Nomor HP wajib diisi"
+                    }
+                },
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function(element) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+        })
     </script>
 
 @endsection

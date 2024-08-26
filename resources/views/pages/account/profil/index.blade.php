@@ -2,6 +2,19 @@
 
 @section('title', 'Profil Saya')
 
+@section('component-css')
+    <style>
+        .invalid-feedback {
+            color: #a94442;
+            font-size: 10px;
+        }
+
+        .is-invalid {
+            border: 1px solid #a94442 !important;
+        }
+    </style>
+@endsection
+
 @section('content-page')
 
     <div class="">
@@ -37,7 +50,7 @@
                     <div class="x_content">
                         <form
                             action="{{ route('pages.account.profil.update', ['member_account_code' => session('data.member_account_code')]) }}"
-                            method="POST">
+                            method="POST" id="form-profil">
                             @csrf
                             @method('PUT')
                             <div class="row">
@@ -90,7 +103,7 @@
                                                 value="{{ old('unique_institution_id', $detail['unique_institution_id']) }}"
                                                 readonly>
                                         @else
-                                        <label for="member_account_code" class="form-label"> Kode Institusi </label>
+                                            <label for="member_account_code" class="form-label"> Kode Institusi </label>
                                             <input type="number" class="form-control" name="member_account_code"
                                                 id="member_account_code" placeholder="Masukkan Kode Member Akun"
                                                 min="1"
@@ -138,7 +151,7 @@
                     <div class="x_content">
                         <form
                             action="{{ route('pages.account.profil.change-password', ['member_acccount_code' => session('data.username')]) }}"
-                            method="POST">
+                            method="POST" id="form-password">
                             @csrf
                             @method('PATCH')
                             <div class="form-group">
@@ -172,4 +185,88 @@
         </div>
     </div>
 
+@endsection
+
+@section('component-js')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#form-profil").validate({
+                rules: {
+                    nama: {
+                        required: true
+                    },
+                    nama_pic: {
+                        required: true
+                    },
+                    username: {
+                        required: true
+                    },
+                    phone_number_pic: {
+                        required: true
+                    },
+
+                },
+                messages: {
+                    nama: {
+                        required: "Nama wajib diisi.",
+                    },
+                    nama_pic: {
+                        required: "Nama PIC wajib diisi."
+                    },
+                    username: {
+                        required: "Username wajib diisi"
+                    },
+                    phone_number_pic: {
+                        required: "Nomor HP PIC wajib diisi"
+                    }
+                },
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function(element) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+
+            $("#form-password").validate({
+                rules: {
+                    old_password: {
+                        required: true
+                    },
+                    new_password: {
+                        required: true
+                    },
+                    confirm_password: {
+                        required: true
+                    }
+
+                },
+                messages: {
+                    old_password: {
+                        required: "Password Lama wajib diisi.",
+                    },
+                    new_password: {
+                        required: "Password Baru wajib diisi."
+                    },
+                    confirm_password: {
+                        required: "Konfirmasi Password wajib diisi"
+                    }
+                },
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function(element) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+        })
+    </script>
 @endsection

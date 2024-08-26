@@ -1,73 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
-    <meta name="author" content="Kodinger">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>
-        {{ config('app.name') }}
+	<meta charset="utf-8">
+	<meta name="author" content="PT Xtreme Network Sistem">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>
+        .: {{ config('app.name') }} - Lupa Password :.
     </title>
-    <link rel="icon" type="image/png" href="{{ URL::asset('template/images/IMAGE-LOGO-TNOS.png') }}" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="icon" type="image/png" href="{{ url('/template/images/LOGO-TAB-TNOS.png') }}" />
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="{{ url('/login-template/css/my-login.css') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
-        html,
-        body {
-            font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
-            height: 100%;
-        }
-    </style>
 </head>
 
-<body class="my-login-page" style="background-color: #6395B9
-;">
-    <div style="margin-top: 60px"></div>
-    <div class="row p-0 m-0" style="justify-content: center; align-items: center;">
-        <div class="col-md-5">
-
-
-            <div class="card">
-                <form action="https://trackormawa.polindra.ac.id/lupa_password" method="POST">
-                    @csrf
-                    <div class="card-body">
-                        <div class="image">
-                            <center>
-                                <img src="{{ url('/template/images/IMAGE-LOGO-TNOS.png') }}"
-                                    style="width: 20%; height: 20%">
-                            </center>
+<body class="my-login-page">
+	<section class="h-100">
+		<div class="container h-100">
+			<div class="row justify-content-md-center h-100">
+                <div class="card-wrapper">
+                    <div class="brand">
+                        <img src="{{ url('/template/images/LOGO-TAB-TNOS.png') }}" alt="logo">
+					</div>
+					<div class="card fat">
+                        @if (session("success"))
+                        <div class="alert alert-success">
+                            <strong class="text-uppercase">
+                                Berhasil,
+                            </strong>
+                            {!! session('success') !!}
                         </div>
-                        <h4 class="text-center" style="margin-top: 20px">
-                            Lupa Password
-                        </h4>
-                        <h6 class="text-center" style="color: gray">
-                            Silahkan Isikan Email Valid Untuk Mengganti Password Anda
-                        </h6>
-
-                        <div class="form-group">
-                            <label for="email">E - MAIL</label>
-                            <input type="text" class="form-control " name="email" id="email"
-                                placeholder="Masukkan E - Mail" value="">
+                        @elseif(session("error"))
+                        <div class="alert alert-danger">
+                            <strong class="text-uppercase">
+                                Gagal,
+                            </strong>
+                            {!! session('error') !!}
                         </div>
-                        <br>
-                        <button type="submit" class="btn btn-primary btn-sm"
-                            style="width: 100%; background-color: #00A0F0">
-                            Kirim
-                        </button>
-                        <hr>
-                        <a href="{{ url('/pages/login') }}">
-                            Kembali Ke Halaman Login
-                        </a>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+                        @endif
+						<div class="card-body">
+							<div class="card-title text-center text-uppercase">
+                                <strong style="font-size: 24px">
+                                    Lupa Password
+                                </strong>
+                                <br>
+                                <small style="font-size: 14px">
+                                    Silahkan Isikan Email Valid Untuk Mengganti Password Anda
+                                </small>
+                            </div>
+							<form method="POST" class="my-login-validation" action="{{ route('pages.login.post-login') }}">
+                                @csrf
+								<div class="form-group">
+									<label for="email">Email</label>
+									<input id="email" type="email" class="form-control" name="email" placeholder="Masukkan Email" value="{{ old('email') }}">
+								</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous">
-    </script>
+								<div class="form-group m-0">
+									<button type="submit" class="btn btn-primary text-uppercase" style="width: 100%">
+										<strong>
+                                            <i class="fa fa-download"></i> Kirim Email
+                                        </strong>
+									</button>
+								</div>
+							</form>
+
+                            <hr>
+                            <a href="{{ url('/pages/login') }}">
+                                <div class="text-center">
+                                    Kembali Ke Halaman Login
+                                </div>
+                            </a>
+						</div>
+					</div>
+					{{-- <div class="footer">
+						Copyright &copy; 2024 &mdash; PT Xtreme Network Sistem
+					</div> --}}
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<script src="{{ url('/login-template/js/my-login.js') }}"></script>
 </body>
-
 </html>

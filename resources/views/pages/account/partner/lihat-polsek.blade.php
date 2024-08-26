@@ -3,15 +3,27 @@
 @section('title', 'Detail Akun POLSEK')
 
 @section('component-css')
-    <link href="{{ url('public/template') }}/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-    <link href="{{ url('public/template') }}/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css"
+    <link href="{{ dynamic_asset('template') }}/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="{{ dynamic_asset('template') }}/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css"
         rel="stylesheet">
-    <link href="{{ url('public/template') }}/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css"
+    <link href="{{ dynamic_asset('template') }}/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css"
         rel="stylesheet">
-    <link href="{{ url('public/template') }}/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css"
+    <link href="{{ dynamic_asset('template') }}/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css"
         rel="stylesheet">
-    <link href="{{ url('public/template') }}/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css"
+    <link href="{{ dynamic_asset('template') }}/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css"
         rel="stylesheet">
+    <link rel="stylesheet" href="{{ dynamic_asset('select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ dynamic_asset('select2/css/select2-bootstrap.min.css') }}">
+    <style>
+        .invalid-feedback {
+            color: #a94442;
+            font-size: 10px;
+        }
+
+        .is-invalid {
+            border: 1px solid #a94442 !important;
+        }
+    </style>
 @endsection
 
 @section('content-page')
@@ -78,7 +90,7 @@
                                         <td class="text-center">{{ $item['total_responder'] }}</td>
                                         <td class="text-center">{{ $item['total_transaksi'] }}</td>
 
-                                    
+
 
                                         <td class="text-center">
                                             @if ($item['total_responder'] != 0)
@@ -95,16 +107,16 @@
                                             @endif
 
                                             @if ($item['total_responder'] == 0 && $item['total_transaksi'] == 0)
-                                            <form
-                                                action="{{ route('pages.account.partner.hapus', ['institution_id' => $item['institution_id']]) }}"
-                                                method="POST" style="display: inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm">
-                                                    <i class="fa fa-trash"></i> Hapus
-                                                </button>
-                                            </form>
-                                        @endif
+                                                <form
+                                                    action="{{ route('pages.account.partner.hapus', ['institution_id' => $item['institution_id']]) }}"
+                                                    method="POST" style="display: inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn-sm">
+                                                        <i class="fa fa-trash"></i> Hapus
+                                                    </button>
+                                                </form>
+                                            @endif
 
                                         </td>
                                     </tr>
@@ -131,13 +143,14 @@
                 </div>
                 <form
                     action="{{ route('pages.accounts.partner.store', ['name' => $name === 'POLRI' ? 'POLSEK' : ($name === 'TNI' ? 'KORAMIL' : $name)]) }}"
-                    method="POST"> @csrf
+                    method="POST" id="form-polsek">
+                    @csrf
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-6 mb-2">
                                 <div class="form-group">
                                     <label for="regency_id" class="form-label"> Polsek </label>
-                                    <select name="regency_id" class="form-control" id="regency_id">
+                                    <select name="regency_id" class="form-control" id="regency_id" style="width: ">
                                         <option value="">- Pilih -</option>
                                         @foreach ($detail as $item)
                                             <option
@@ -211,10 +224,82 @@
 @endsection
 
 @section('component-js')
-    <script src="{{ url('public/template') }}/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="{{ url('public/template') }}/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-    <script src="{{ url('public/template') }}/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js">
+    <script src="{{ dynamic_asset('template') }}/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="{{ dynamic_asset('template') }}/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="{{ dynamic_asset('template') }}/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js">
     </script>
-    <script src="{{ url('public/template') }}/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="{{ url('public/template') }}/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="{{ dynamic_asset('template') }}/vendors/datatables.net-responsive/js/dataTables.responsive.min.js">
+    </script>
+    <script src="{{ dynamic_asset('template') }}/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="{{ dynamic_asset('select2/js/select2.min.js') }}"></script>
+    <script type="text/javascript">
+        $.fn.modal.Constructor.prototype._enforceFocus = function() {};
+
+        $(function() {
+            $('#regency_id').select2({
+                theme: 'bootstrap4',
+            });
+        });
+
+        $(document).ready(function() {
+            $("#form-polsek").validate({
+                rules: {
+                    regency_id: {
+                        required: true
+                    },
+                    country_code: {
+                        required: true
+                    },
+                    email: {
+                        required: true
+                    },
+                    phone_number: {
+                        required: true
+                    },
+                    nama_pic: {
+                        required: true
+                    },
+                    phone_number_pic: {
+                        required: true
+                    },
+                    alamat_organisasi: {
+                        required: true
+                    }
+                },
+                messages: {
+                    regency_id: {
+                        required: "Kota / Kabupaten wajib diisi.",
+                    },
+                    country_code: {
+                        required: "Kode Negara wajib diisi."
+                    },
+                    email: {
+                        required: "Email wajib diisi"
+                    },
+                    phone_number: {
+                        required: "Nomor HP wajib diisi"
+                    },
+                    nama_pic: {
+                        required: "Nama PIC wajib diisi"
+                    },
+                    phone_number_pic: {
+                        required: "Nomor HP PIC wajib diisi"
+                    },
+                    alamat_organisasi: {
+                        required: "Alamat Organisasi wajib diisi"
+                    }
+                },
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function(element) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+        })
+    </script>
 @endsection

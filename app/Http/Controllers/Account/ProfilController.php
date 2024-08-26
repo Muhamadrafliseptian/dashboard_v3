@@ -30,8 +30,6 @@ class ProfilController extends Controller
             $currentPaket = $client->get(ApiHelper::apiUrl("/organization/paket/" . session("data")["member_account_code"] . "/current_paket"));
             $responderCurrentPaket = json_decode($currentPaket->getBody(), true);
 
-
-
             DB::commit();
 
             if ($responseProfil["statusCode"] == 200 && $responderCurrentPaket["statusCode"] == 200) {

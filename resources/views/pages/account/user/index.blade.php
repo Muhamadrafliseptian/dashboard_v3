@@ -3,13 +3,24 @@
 @section('title', 'User')
 
 @section('component-css')
-    <link href="{{ url('public/template') }}/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-    <link href="{{ url('public/template') }}/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css"
+    <link href="{{ dynamic_asset('template') }}/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="{{ dynamic_asset('template') }}/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css"
         rel="stylesheet">
-    <link href="{{ url('public/template') }}/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css"
+    <link href="{{ dynamic_asset('template') }}/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css"
         rel="stylesheet">
-    <link href="{{ url('public/template') }}/vendors/switchery/dist/switchery.min.css" rel="stylesheet">
-    <link href="{{ url('public/template') }}/build/css/custom.min.css" rel="stylesheet">
+    <link href="{{ dynamic_asset('template') }}/vendors/switchery/dist/switchery.min.css" rel="stylesheet">
+    <link href="{{ dynamic_asset('template') }}/build/css/custom.min.css" rel="stylesheet">
+
+    <style>
+        .invalid-feedback {
+            color: #a94442;
+            font-size: 10px;
+        }
+
+        .is-invalid {
+            border: 1px solid #a94442 !important;
+        }
+    </style>
 @endsection
 
 @section('content-page')
@@ -172,7 +183,7 @@
                 </div>
                 <form
                     action="{{ route('pages.accounts.user.store', ['member_account_code' => session('data.member_account_code')]) }}"
-                    method="POST">
+                    method="POST" id="form-user">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
@@ -216,7 +227,6 @@
         </div>
     </div>
 
-
     <div class="modal fade bs-example-modal-xl" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -231,7 +241,7 @@
                 </div>
                 <form
                     action="{{ route('pages.accounts.user.storeExcel', ['member_account_code' => session('data.member_account_code')]) }}"
-                    method="POST" enctype="multipart/form-data">
+                    method="POST" enctype="multipart/form-data" id="form-excel">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
@@ -241,10 +251,11 @@
                                     <input type="file" class="form-control" name="file" id="file">
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <a href="{{ route('pages.accounts.user.example-format') }}" class="btn btn-success btn-sm">
+                                    <a href="{{ route('pages.accounts.user.example-format') }}"
+                                        class="btn btn-success btn-sm">
                                         <i class="fa fa-download"></i> Download Contoh Format
                                     </a>
                                 </div>
@@ -268,13 +279,14 @@
 @endsection
 
 @section('component-js')
-    <script src="{{ url('public/template') }}/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="{{ url('public/template') }}/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-    <script src="{{ url('public/template') }}/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js">
+    <script src="{{ dynamic_asset('template') }}/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="{{ dynamic_asset('template') }}/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="{{ dynamic_asset('template') }}/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js">
     </script>
-    <script src="{{ url('public/template') }}/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="{{ url('public/template') }}/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-    <script src="{{ url('public/template') }}/vendors/switchery/dist/switchery.min.js"></script>
+    <script src="{{ dynamic_asset('template') }}/vendors/datatables.net-responsive/js/dataTables.responsive.min.js">
+    </script>
+    <script src="{{ dynamic_asset('template') }}/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="{{ dynamic_asset('template') }}/vendors/switchery/dist/switchery.min.js"></script>
 
     <script type="text/javascript">
         $.ajaxSetup({
@@ -332,5 +344,71 @@
                 });
             });
         });
+
+        $(document).ready(function() {
+            $("#form-user").validate({
+                rules: {
+                    nama: {
+                        required: true
+                    },
+                    country_code: {
+                        required: true
+                    },
+                    email: {
+                        required: true
+                    },
+                    phone_number: {
+                        required: true
+                    }
+                },
+                messages: {
+                    nama: {
+                        required: "Nama wajib diisi.",
+                    },
+                    country_code: {
+                        required: "Kode Negara wajib diisi."
+                    },
+                    email: {
+                        required: "Email wajib diisi"
+                    },
+                    phone_number: {
+                        required: "Nomor HP wajib diisi"
+                    }
+                },
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function(element) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+
+            $("#form-excel").validate({
+                rules: {
+                    file: {
+                        required: true
+                    },
+                },
+                messages: {
+                    file: {
+                        required: "File wajib diisi.",
+                    },
+                },
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function(element) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+        })
     </script>
 @endsection
