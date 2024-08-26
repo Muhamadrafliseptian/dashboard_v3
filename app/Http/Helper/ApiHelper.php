@@ -8,7 +8,9 @@ class ApiHelper
 
     public static function init()
     {
-        self::$baseUrl = "https://api-tab.tnos.app/api";
+        // self::$baseUrl = "https://api-tab.tnos.app/api";
+        self::$baseUrl = "http://192.168.100.104:3001/api";
+
     }
 
     public static function baseUrl()
