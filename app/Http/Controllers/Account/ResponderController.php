@@ -40,7 +40,6 @@ class ResponderController extends Controller
             } else {
                 return redirect()->route("pages.dashboard")->with("error", "Terjadi Kesalahan");
             }
-
         } catch (\Exception $e) {
 
             DB::rollBack();
@@ -74,7 +73,6 @@ class ResponderController extends Controller
             } else {
                 return back()->with("error", $responseBody["message"]);
             }
-
         } catch (\Exception $e) {
 
             DB::rollBack();
@@ -113,8 +111,6 @@ class ResponderController extends Controller
             } else {
                 return redirect()->route("pages.dashboard")->with("error", "Terjadi Kesalahan");
             }
-
-
         } catch (\Exception $e) {
 
             DB::rollBack();
@@ -148,7 +144,6 @@ class ResponderController extends Controller
             } else {
                 return back()->with("error", $responseBody["message"]);
             }
-
         } catch (\Exception $e) {
 
             DB::rollBack();
@@ -162,7 +157,6 @@ class ResponderController extends Controller
         try {
 
             DB::beginTransaction();
-
 
             $data = [];
 
@@ -181,7 +175,7 @@ class ResponderController extends Controller
                 );
             } else if ($request->tipe == "partner") {
                 $responseData = $client->put(
-                    ApiHelper::apiUrl("/request_contact/". $idUser ."/put/status_responder"),
+                    ApiHelper::apiUrl("/request_contact/" . $idUser . "/put/status_responder"),
                     [
                         'headers' => [
                             'Content-Type' => 'application/json'
@@ -199,7 +193,6 @@ class ResponderController extends Controller
                 "message" => "Data Berhasil di Simpan",
                 "data" => $response
             ]);
-
         } catch (\Exception $e) {
 
             DB::rollBack();
@@ -229,14 +222,53 @@ class ResponderController extends Controller
                     "status" => true,
                     "message" => $responseBody["message"]
                 ]);
-
             } else {
                 return response()->json([
                     "status" => false,
                     "message" => $responseBody["message"]
                 ]);
             }
+        } catch (\Exception $e) {
 
+            DB::rollBack();
+
+            return response()->json([
+                "status" => false,
+                "message" => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function updateStatusKerja(Request $request, $username)
+    {
+        try {
+
+            DB::beginTransaction();
+
+            $data = [];
+
+            $client = new Client([
+                "timeout" => 10
+            ]);
+
+            $responseData = $client->put(
+                ApiHelper::apiUrl("/organization/account/responder/" . $username . "/put/work_status"),
+                [
+                    'headers' => [
+                        'Content-Type' => 'application/json'
+                    ]
+                ]
+            );
+
+            $response = json_decode($responseData->getBody(), true);
+
+            DB::commit();
+
+            return response()->json([
+                "status" => true,
+                "message" => "Data Berhasil di Simpan",
+                "data" => $response
+            ]);
         } catch (\Exception $e) {
 
             DB::rollBack();

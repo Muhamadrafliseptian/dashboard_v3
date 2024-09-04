@@ -77,7 +77,8 @@
                                     <th class="text-center">Email</th>
                                     <th class="text-center">Nomor HP</th>
                                     <th class="text-center">Username</th>
-                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Status Akun</th>
+                                    <th class="text-center">Status Kerja</th>
                                     <th class="text-center">Org</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
@@ -100,7 +101,7 @@
                                             <div class="custom-control custom-switch">
                                                 <input
                                                     {{ $item['detail']['account_status_id'] == 'active' ? 'checked' : '' }}
-                                                    type="checkbox" class="custom-control-input js-switch"
+                                                    type="checkbox" class="custom-control-input js-switch status-akun"
                                                     id="customSwitch{{ $item['detail']['id_responder_organization'] }}"
                                                     data-id="{{ empty($item['detail']['id_request_contact']) ? $item['detail']['id_responder_organization'] : $item['detail']['id_request_contact'] }}"
                                                     data-tipe="{{ $item['detail']['org'] }}">
@@ -109,6 +110,22 @@
                                                     {{ $item['detail']['account_status_id'] }}
                                                 </label>
                                             </div>
+                                        </td>
+                                        <td class="text-center">
+                                            @if ($item["detail"]["org"] == "partner")
+                                            @else
+                                            <div class="custom-control custom-switch">
+                                                <input
+                                                    {{ $item['detail']['work_id'] == "on" ? 'checked' : '' }}
+                                                    type="checkbox" class="custom-control-input js-switch status-kerja"
+                                                    id="customSwitch{{ $item['detail']['id_responder_organization'] }}"
+                                                    data-username="{{ $item['detail']['username'] }}">
+                                                <label class="custom-control-label text-uppercase"
+                                                    for="customSwitch{{ $item['detail']['id_responder_organization'] }}">
+                                                    {{ $item['detail']['work_id'] == "on" ? "ON" : "OFF" }}
+                                                </label>
+                                            </div>
+                                            @endif
                                         </td>
                                         <td class="text-center">{{ $item['detail']['nama_institusi'] }}</td>
                                         <td class="text-center">
@@ -248,7 +265,8 @@
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            let checkboxes = document.querySelectorAll(".js-switch");
+            let checkboxes = document.querySelectorAll(".status-akun");
+            let checkboxesKerja = document.querySelectorAll(".status-kerja");
 
             checkboxes.forEach(function(checkbox) {
                 checkbox.addEventListener("change", function() {
@@ -263,6 +281,32 @@
                         data: {
                             checked: checked,
                             tipe: cekData
+                        },
+                        success: function(response) {
+                            if (response.status == true) {
+                                alert(response.message);
+
+                                window.location.reload();
+                            }
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
+                });
+            });
+
+            checkboxesKerja.forEach(function(checkboxKerja) {
+                checkboxKerja.addEventListener("change", function() {
+                    let checked = checkboxKerja.checked;
+                    let username = checkboxKerja.getAttribute("data-username");
+
+                    $.ajax({
+                        url: "{{ url('/pages/organization/account/responder') }}" + "/" + username +
+                            "/put/work_status",
+                        type: "PUT",
+                        data: {
+                            checked: checked,
                         },
                         success: function(response) {
                             if (response.status == true) {
