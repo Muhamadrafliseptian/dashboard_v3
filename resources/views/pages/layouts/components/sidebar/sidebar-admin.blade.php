@@ -33,6 +33,9 @@
                         <li class="{{ Request::segment(3) == "history-payment" ? 'active' : '' }}">
                             <a href="{{ route('pages.transaction.history-payment.index') }}"> Riwayat Pembayaran </a>
                         </li>
+                        <li>
+                            <a href="{{ route('pages.transaksi.riwayat-transaksi.index') }}"> Riwayat Aktifitas </a>
+                        </li>
                     </ul>
                 </li>
             @endif

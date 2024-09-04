@@ -15,6 +15,7 @@ use App\Http\Controllers\Responder\AkunController;
 use App\Http\Controllers\Transaksi\HistoryPaymentController;
 use App\Http\Controllers\Transaksi\HistoryPaymentPartnerController;
 use App\Http\Controllers\Transaksi\PaymentController;
+use App\Http\Controllers\Transaksi\RiwayatAktifitasController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/", function () {
@@ -143,6 +144,12 @@ Route::group(["middleware" => ["check.session"]], function () {
                     Route::get("/", "index")->name("pages.transaction.history-payment-partner.index");
                 });
             });
+
+            Route::controller(RiwayatAktifitasController::class)->group(function() {
+                Route::prefix("riwayat-aktifitas")->group(function() {
+                    Route::get("/", "index")->name("pages.transaksi.riwayat-transaksi.index");
+                });
+            });
         });
 
         Route::prefix("pengaturan")->group(function () {
@@ -159,6 +166,14 @@ Route::group(["middleware" => ["check.session"]], function () {
         Route::prefix("responder")->group(function() {
             Route::prefix("akun")->group(function() {
                 Route::get("/", [AkunController::class, "index"])->name("pages.responder.akun.index");
+            });
+        });
+
+        Route::prefix("organization")->group(function() {
+            Route::prefix("account")->group(function() {
+                Route::prefix("responder")->group(function() {
+                    Route::put("/{username}/put/work_status", [ResponderController::class, "updateStatusKerja"]);
+                });
             });
         });
     });
