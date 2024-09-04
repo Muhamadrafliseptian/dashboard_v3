@@ -44,16 +44,25 @@
                             <thead>
                                 <tr>
                                     <th class="text-center">No</th>
-                                    <th>Nama</th>
-                                    <th>Email</th>
-                                    <th class="text-center">Nomor HP</th>
-                                    <th class="text-center">Email</th>
-                                    <th class="text-center">Kode Referensi</th>
-                                    <th class="text-center">Waktu Registrasi</th>
+                                    <th class="text-center">Nama</th>
+                                    <th class="text-center">Keterangan</th>
+                                    <th class="text-center">Nama Responder</th>
+                                    <th class="text-center">Tanggal</th>
                                 </tr>
                             </thead>
-                            <tbody>
-
+                            <tbody class="text-center">
+                                @php
+                                                $nomerOrganisasi = 0;
+                                            @endphp
+                                @foreach ($array_filter_umum as $item)
+                                    <tr>
+                                        <td>{{ ++$nomerOrganisasi }}</td>
+                                        <td>{{ $item['nama'] }}</td>
+                                        <td>{{ $item['keterangan'] }}</td>
+                                        <td>{{ $item['nama_responder'] }}</td>
+                                        <td>{{ $item['timestamp'] }}</td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
